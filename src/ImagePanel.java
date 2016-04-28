@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.*;
 import java.io.*;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -25,6 +26,7 @@ public class ImagePanel extends JPanel{
         //g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
         //g.drawrect(40, 100, 840, 100);
         g.setColor(Color.ORANGE);
+        Feld f0 = new Feld(Content.contents.RED, 37, 20,80,40,40);
         //Rectangle r = new Rectangle(20, 10, 800, 10);
         //g.fillRect(r.x, r.y, r.width, r.height);
         /*horizontale Linien*/
@@ -77,7 +79,8 @@ public class ImagePanel extends JPanel{
         g.setColor(Color.BLACK);
      	
         /*erste Reihe schwarze Felder*/
-        g.fillOval(20,80,40,40);
+        //g.fillOval(20,80,40,40);
+        g.fillOval(f0.x, f0.y, f0.breite, f0.hoehe);
     	g.fillOval(70,80,40,40);
     	g.fillOval(120,80,40,40);
     	g.fillOval(170,80,40,40);
@@ -261,6 +264,8 @@ public class ImagePanel extends JPanel{
     	g.fillOval(765,760,40,40);
     	g.fillOval(695,810,40,40);
     	g.fillOval(745,810,40,40);
+    	
+    	
     	
 
     }
