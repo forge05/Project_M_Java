@@ -36,8 +36,5 @@ public class Feld {
 		EMPTY,
 		BLOCK;
 	}
-	public static void initFelder(){
-		//erstelle Felder
-	}
 	
 }
