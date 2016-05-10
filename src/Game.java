@@ -1,4 +1,15 @@
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
+
 import javax.swing.*;
+
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.graph.ClassBasedEdgeFactory;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 public class Game {
 	public static Feld f0;
@@ -133,31 +144,37 @@ public class Game {
 	public static Feld f129;
 	public static Feld f130;
 	public static Feld f131;
-	
-	
-	
+	public static boolean someoneWon = false;
+	public static JFrame wnd;
+	public static Player red;
+	public static DirectedGraph<Feld, DefaultEdge> feldGraph;
+
 	public static void main(String[] args) {
 
 		// JPanel backgroundImagePanel = new JPanel();
 		// initMenu
 		initSpielfeld();
+		feldGraph = createBoardGraph();
+		//System.out.println(feldGraph.toString());
 		initPlayer();
-		// initGame();
+		initGame((byte) 1, (byte) 0);
+		// runGame();
 
 	}
 
 	public static void initGame(byte anzSpieler, byte anzCPUs) {
-		Feld[] fRed = { f112, f113, f14, f115, f116 };
-		Feld[] fGreen = { f117, f18, f119, f120, f121 };
-		Feld[] fYellow = { f122, f123, f124, f125, f126 };
-		Feld[] fBlue = { f127, f128, f129, f130, f131 };
-		Player red = new Player("red", Content.contents.RED, fRed);
-		Player green = new Player("green", Content.contents.GREEN, fGreen);
-		Player yellow = new Player("yellow", Content.contents.YELLOW, fYellow);
-		Player blue = new Player("blue", Content.contents.BLUE, fBlue);
-		//Player[] team = new Player[];
-		Content.contents c = Content.contents.valueOf("1");
-		System.out.println(c);
+		Feld[] fRed = { f112, f113, f114, f115, f116 };
+		// Feld[] fGreen = { f117, f118, f119, f120, f121 };
+		// Feld[] fYellow = { f122, f123, f124, f125, f126 };
+		// Feld[] fBlue = { f127, f128, f129, f130, f131 };
+		red = new Player("red", Content.contents.RED, fRed);
+		// Player green = new Player("green", Content.contents.GREEN, fGreen);
+		// Player yellow = new Player("yellow", Content.contents.YELLOW,
+		// fYellow);
+		// Player blue = new Player("blue", Content.contents.BLUE, fBlue);
+		// Player[] team = new Player[];
+		// Content.contents c = Content.contents.valueOf("1");
+		// System.out.println(c);
 		// int i = 0;
 		/*
 		 * for (int i = 0; i < anzSpieler; i++) {
@@ -167,6 +184,365 @@ public class Game {
 		 * anzSpieler + 1; i <= (anzCPUs + anzSpieler); i++) { team[i] = new
 		 * CPU(); }
 		 */
+		int rückZahl = 0;
+		Object warteObjekt = new Object();
+		synchronized (warteObjekt) {
+			try {
+				while (!someoneWon) {
+					warteObjekt.wait(50);
+
+					if (rückZahl == 0) {
+						rückZahl = JSpielfeld.wuerfelErg;
+						// System.out.println("" + rückZahl);
+					} else {
+						rücken(rückZahl);
+						//System.out.println("ich rücke jetzt mit: " + rückZahl);
+						someoneWon = true;
+					}
+
+				}
+			} catch (InterruptedException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
+	public static void rücken(int rückZahl){
+		// ermittle Felder von Spieler
+		// rücken muss rekursiv sein mit allen kanten
+		// rückzahl muss verringert werden
+		Feld[] spielerFelder = red.getMyFields();
+		for(Feld feld: spielerFelder){
+			// berechne Felder und gib ihnen Listener 
+			Iterator<Feld> iter =
+		            //new DepthFirstIterator<Feld, DefaultEdge>(feldGraph);
+					new DepthFirstIterator<Feld, DefaultEdge>(feldGraph, feld);
+		        //Feld vertex;
+		        for(int i = 1; i <= rückZahl; i++) {
+		            feld = iter.next();
+		            System.out.println(feld.nummer);
+		            System.out.println(
+		                "Vertex " + feld.toString() + " is connected to: "
+		                + feldGraph.edgesOf(feld).toString());
+		        }
+			//feldGraph.outgoingEdgesOf(feld);
+		}
+		// warte auf input vom spieler und rücke Figur
+	}
+
+	// public static void runGame(){
+
+	// }
+	private static DirectedGraph<Feld, DefaultEdge> createBoardGraph() {
+		EdgeFactory<Feld, DefaultEdge> vFactory = new ClassBasedEdgeFactory<>(DefaultEdge.class);
+		DirectedGraph<Feld, DefaultEdge> g = new DefaultDirectedGraph<>(vFactory);
+
+		try {
+			// add the vertices
+			g.addVertex(f0);
+			g.addVertex(f1);
+			g.addVertex(f2);
+			g.addVertex(f3);
+			g.addVertex(f4);
+			g.addVertex(f5);
+			g.addVertex(f6);
+			g.addVertex(f7);
+			g.addVertex(f8);
+			g.addVertex(f9);
+			g.addVertex(f10);
+			g.addVertex(f11);
+			g.addVertex(f12);
+			g.addVertex(f13);
+			g.addVertex(f14);
+			g.addVertex(f15);
+			g.addVertex(f16);
+			g.addVertex(f17);
+			g.addVertex(f18);
+			g.addVertex(f19);
+			g.addVertex(f20);
+			g.addVertex(f21);
+			g.addVertex(f22);
+			g.addVertex(f23);
+			g.addVertex(f24);
+			g.addVertex(f25);
+			g.addVertex(f26);
+			g.addVertex(f27);
+			g.addVertex(f28);
+			g.addVertex(f29);
+			g.addVertex(f30);
+			g.addVertex(f31);
+			g.addVertex(f32);
+			g.addVertex(f33);
+			g.addVertex(f34);
+			g.addVertex(f35);
+			g.addVertex(f36);
+			g.addVertex(f37);
+			g.addVertex(f38);
+			g.addVertex(f39);
+			g.addVertex(f40);
+			g.addVertex(f41);
+			g.addVertex(f42);
+			g.addVertex(f43);
+			g.addVertex(f44);
+			g.addVertex(f45);
+			g.addVertex(f46);
+			g.addVertex(f47);
+			g.addVertex(f48);
+			g.addVertex(f49);
+			g.addVertex(f50);
+			g.addVertex(f51);
+			g.addVertex(f52);
+			g.addVertex(f53);
+			g.addVertex(f54);
+			g.addVertex(f55);
+			g.addVertex(f56);
+			g.addVertex(f57);
+			g.addVertex(f58);
+			g.addVertex(f59);
+			g.addVertex(f60);
+			g.addVertex(f61);
+			g.addVertex(f62);
+			g.addVertex(f63);
+			g.addVertex(f64);
+			g.addVertex(f65);
+			g.addVertex(f66);
+			g.addVertex(f67);
+			g.addVertex(f68);
+			g.addVertex(f69);
+			g.addVertex(f70);
+			g.addVertex(f71);
+			g.addVertex(f72);
+			g.addVertex(f73);
+			g.addVertex(f74);
+			g.addVertex(f75);
+			g.addVertex(f76);
+			g.addVertex(f77);
+			g.addVertex(f78);
+			g.addVertex(f79);
+			g.addVertex(f80);
+			g.addVertex(f81);
+			g.addVertex(f82);
+			g.addVertex(f83);
+			g.addVertex(f84);
+			g.addVertex(f85);
+			g.addVertex(f86);
+			g.addVertex(f87);
+			g.addVertex(f88);
+			g.addVertex(f89);
+			g.addVertex(f90);
+			g.addVertex(f91);
+			g.addVertex(f92);
+			g.addVertex(f93);
+			g.addVertex(f94);
+			g.addVertex(f95);
+			g.addVertex(f96);
+			g.addVertex(f97);
+			g.addVertex(f98);
+			g.addVertex(f99);
+			g.addVertex(f100);
+			g.addVertex(f101);
+			g.addVertex(f102);
+			g.addVertex(f103);
+			g.addVertex(f104);
+			g.addVertex(f105);
+			g.addVertex(f106);
+			g.addVertex(f107);
+			g.addVertex(f108);
+			g.addVertex(f109);
+			g.addVertex(f110);
+			g.addVertex(f111);
+			g.addVertex(f112);
+			g.addVertex(f113);
+			g.addVertex(f114);
+			g.addVertex(f115);
+			g.addVertex(f116);
+			g.addVertex(f117);
+			g.addVertex(f118);
+			g.addVertex(f119);
+			g.addVertex(f120);
+			g.addVertex(f121);
+			g.addVertex(f122);
+			g.addVertex(f123);
+			g.addVertex(f124);
+			g.addVertex(f125);
+			g.addVertex(f126);
+			g.addVertex(f127);
+			g.addVertex(f128);
+			g.addVertex(f129);
+			g.addVertex(f130);
+			g.addVertex(f131);
+
+			// add edges to create linking structure
+			g.addEdge(f0, f1);
+			g.addEdge(f1, f2);
+			g.addEdge(f2, f3);
+			g.addEdge(f3, f4);
+			g.addEdge(f4, f5);
+			g.addEdge(f6, f7);
+			g.addEdge(f7, f8);
+			g.addEdge(f8, f120);
+			g.addEdge(f9, f8);
+			g.addEdge(f10, f9);
+			g.addEdge(f11, f10);
+			g.addEdge(f12, f11);
+			g.addEdge(f13, f12);
+			g.addEdge(f14, f13);
+			g.addEdge(f15, f14);
+			g.addEdge(f16, f15);
+			g.addEdge(f17, f0);
+			g.addEdge(f18, f16);
+			g.addEdge(f19, f17);
+			g.addEdge(f20, f19);
+			g.addEdge(f21, f20);
+			g.addEdge(f22, f21);
+			g.addEdge(f23, f22);
+			g.addEdge(f24, f23);
+			g.addEdge(f25, f24);
+			g.addEdge(f26, f25);
+			g.addEdge(f27, f26);
+			g.addEdge(f27, f28);
+			g.addEdge(f28, f29);
+			g.addEdge(f29, f30);
+			g.addEdge(f30, f31);
+			g.addEdge(f31, f32);
+			g.addEdge(f32, f33);
+			g.addEdge(f33, f34);
+			g.addEdge(f34, f35);
+			g.addEdge(f35, f18);
+			g.addEdge(f36, f27);
+			g.addEdge(f37, f38);
+			g.addEdge(f38, f39);
+			g.addEdge(f39, f36);
+			g.addEdge(f40, f39);
+			g.addEdge(f41, f40);
+			g.addEdge(f42, f37);
+			g.addEdge(f43, f41);
+			g.addEdge(f44, f45);
+			g.addEdge(f45, f46);
+			g.addEdge(f46, f42);
+			g.addEdge(f47, f46);
+			//
+			g.addEdge(f48, f47);
+			g.addEdge(f48, f49);
+			//
+			g.addEdge(f49, f50);
+			g.addEdge(f50, f43);
+			g.addEdge(f51, f50);
+			g.addEdge(f52, f51);
+			g.addEdge(f53, f44);
+			g.addEdge(f54, f52);
+			g.addEdge(f55, f56);
+			g.addEdge(f56, f57);
+			g.addEdge(f57, f53);
+			g.addEdge(f58, f57);
+			//
+			g.addEdge(f59, f58);
+			g.addEdge(f59, f60);
+			//
+			g.addEdge(f60, f59);
+			//
+			g.addEdge(f61, f60);
+			g.addEdge(f61, f62);
+			//
+			g.addEdge(f62, f63);
+			//
+			g.addEdge(f63, f62);
+			g.addEdge(f63, f64);
+			//
+			g.addEdge(f64, f65);
+			g.addEdge(f65, f54);
+			g.addEdge(f66, f65);
+			g.addEdge(f67, f66);
+			g.addEdge(f68, f55);
+			g.addEdge(f69, f59);
+			g.addEdge(f70, f63);
+			g.addEdge(f71, f67);
+			g.addEdge(f72, f73);
+			g.addEdge(f73, f74);
+			g.addEdge(f74, f68);
+			g.addEdge(f75, f74);
+			//
+			g.addEdge(f76, f75);
+			g.addEdge(f76, f77);
+			//
+			g.addEdge(f77, f78);
+			g.addEdge(f78, f69);
+			g.addEdge(f79, f78);
+			//
+			g.addEdge(f80, f79);
+			g.addEdge(f80, f81);
+			//
+			g.addEdge(f81, f82);
+			g.addEdge(f82, f70);
+			g.addEdge(f83, f82);
+			//
+			g.addEdge(f84, f83);
+			g.addEdge(f84, f85);
+			//
+			g.addEdge(f85, f86);
+			g.addEdge(f86, f71);
+			g.addEdge(f87, f86);
+			g.addEdge(f88, f87);
+			g.addEdge(f89, f72);
+			g.addEdge(f90, f76);
+			g.addEdge(f91, f80);
+			g.addEdge(f92, f84);
+			g.addEdge(f93, f88);
+			g.addEdge(f94, f89);
+			g.addEdge(f95, f94);
+			//
+			g.addEdge(f96, f95);
+			g.addEdge(f96, f97);
+			//
+			g.addEdge(f97, f98);
+			g.addEdge(f98, f90);
+			g.addEdge(f99, f98);
+			//
+			g.addEdge(f100, f99);
+			g.addEdge(f100, f101);
+			//
+			g.addEdge(f101, f102);
+			g.addEdge(f102, f91);
+			g.addEdge(f103, f102);
+			//
+			g.addEdge(f104, f103);
+			g.addEdge(f104, f105);
+			//
+			g.addEdge(f105, f106);
+			g.addEdge(f106, f92);
+			g.addEdge(f107, f106);
+			//
+			g.addEdge(f108, f107);
+			g.addEdge(f108, f109);
+			//
+			g.addEdge(f109, f110);
+			g.addEdge(f110, f93);
+			g.addEdge(f112, f96);
+			g.addEdge(f113, f96);
+			g.addEdge(f114, f96);
+			g.addEdge(f115, f96);
+			g.addEdge(f116, f96);
+			g.addEdge(f117, f100);
+			g.addEdge(f118, f100);
+			g.addEdge(f119, f100);
+			g.addEdge(f120, f100);
+			g.addEdge(f121, f100);
+			g.addEdge(f122, f104);
+			g.addEdge(f123, f104);
+			g.addEdge(f124, f104);
+			g.addEdge(f125, f104);
+			g.addEdge(f126, f104);
+			g.addEdge(f127, f108);
+			g.addEdge(f128, f108);
+			g.addEdge(f129, f108);
+			g.addEdge(f130, f108);
+			g.addEdge(f131, f108);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return g;
 	}
 
 	public static void initPlayer() {
@@ -175,7 +551,7 @@ public class Game {
 
 	public static void initSpielfeld() {
 		initFelder();
-		JFrame wnd = new JSpielfeld("Project_M");
+		wnd = new JSpielfeld("Project_M");
 		wnd.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// begin game
 	}

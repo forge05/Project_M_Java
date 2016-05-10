@@ -3,7 +3,7 @@ public class Player {
 
 	String name;
 	Content.contents inhalt;
-	Feld[] myFields;
+	private Feld[] myFields;
 	
 	public Player(String gamerName, Content.contents content, Feld[] myF) {
 		name = gamerName;
@@ -11,6 +11,9 @@ public class Player {
 		myFields = myF;
 	}
 	
+	public Feld[] getMyFields(){
+		return myFields;
+	}
 }
 
 

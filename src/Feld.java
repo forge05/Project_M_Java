@@ -14,7 +14,8 @@ public class Feld {
 	}
 	
 	public Feld(Content.contents content, int distance, int rechtswert, int untenwert, int width, int height) {//Feld ...felds ) {
-		super();
+		nummer = id;
+		id++;
 		inhalt = content;
 		/*int i = 0;
 		for (Feld nachbar:felds) {
@@ -37,4 +38,7 @@ public class Feld {
 		BLOCK;
 	}
 	
+	public String toString(){
+		return "f" + this.nummer;
+	}
 }
